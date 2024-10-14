@@ -1,0 +1,108 @@
+using PhanDangHuy_2280601231.models;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Data.SqlClient;
+using System.Drawing;
+using System.Linq;
+using System.Runtime.Remoting.Contexts;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using System.Data.Entity.Migrations;
+namespace PhanDangHuy_2280601231
+{
+    public partial class frmSanPham : Form
+    {
+        Model1 context = new Model1();
+        public frmSanPham()
+        {
+
+            InitializeComponent();
+            List<LoaiSP> listLoaiSP = context.LoaiSP.ToList();
+            List<SanPham> listSanPham = context.SanPham.ToList();
+            FillDataCMB(listSanPham);
+            FillDataDGV(listLoaiSP);
+        }
+
+        private void FillDataDGV(List<LoaiSP> listLoaiSP)
+        {
+            dgvSP.Rows.Clear();
+
+            foreach (var loaiSP in listLoaiSP)
+            {
+                int RowNew = dgvSP.Rows.Add();
+                dgvSP.Rows[RowNew].Cells[0].Value = loaiSP.MaLoai;
+                dgvSP.Rows[RowNew].Cells[0].Value = loaiSP.TenLoai;
+                dgvSP.Rows[RowNew].Cells[0].Value = loaiSP.SanPham;
+
+
+            }
+        }
+
+        private void FillDataCMB(List<SanPham> listSanPham)
+        {
+            cboLoaiSP.DataSource = listSanPham;
+            cboLoaiSP.DisplayMember = "MaSP";
+            cboLoaiSP.ValueMember = "TenSP";
+        }
+
+        private void frmSanPham_Load(object sender, EventArgs e)
+        {
+            try
+            {
+                List<LoaiSP> listLoaiSP = context.LoaiSP.ToList();
+                List<SanPham> listSanPham = context.SanPham.ToList();
+
+                BindGrid(listLoaiSP);
+                FillSanPhamCombobox(listSanPham);
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
+        }
+        private void BindGrid(List<LoaiSP> listLoaiSP)
+        {
+            dgvSP.Rows.Clear();
+            foreach (var item in listLoaiSP)
+            {
+                int index = dgvSP.Rows.Add();
+                dgvSP.Rows[index].Cells[0].Value = item.MaLoai;
+                dgvSP.Rows[index].Cells[1].Value = item.TenLoai;
+                dgvSP.Rows[index].Cells[2].Value = item.SanPham;
+            }
+        }
+        private void FillSanPhamCombobox(List<SanPham> listSanPham)
+        {
+            this.cboLoaiSP.DataSource = listSanPham;
+            this.cboLoaiSP.DisplayMember = "MaSP";
+            this.cboLoaiSP.ValueMember = "TenSP";
+        }
+
+        private void cboLoaiSP_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            List<string> categories = new List<string> { "Bánh kẹo", "Giải khát", "Thực phẩm" };
+
+            cboLoaiSP.DataSource = categories;
+        }
+
+     
+
+       
+
+
+
+
+
+
+
+
+
+
+
+
